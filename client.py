@@ -35,32 +35,11 @@ class ConnectionPool(object):
     def pool(self):
         return self.engine.pool
 
-# Thread Safe ?
+
 if config.USE_PREPARE_STMT == False:
     print("Initialize Connection Pool")
     _p = ConnectionPool().pool()
 
-
-"""
-sqlalchemy doc
-    https://docs.sqlalchemy.org/en/20/core/pooling.html
-"""
-# engine = create_engine(config.connection_path, pool_size=300, pool_recycle=-1)
-# pool = engine.pool
-# engine = create_engine("mariadb+pymysql://sysb:sysb@127.0.0.1:3317/test", poolclass=NullPool)
-
-
-"""
-Mysql engine
-# engine = create_engine("mysql+pymysql://lokax:12345@127.0.0.1:3306/test", pool_size=300, pool_recycle=-1)
-# pool = engine.pool
-# engine = create_engine("mysql+pymysql://lokax:12345@127.0.0.1:3306/test", poolclass= NullPool)
-"""
-
-"""
-### Async engine
-# async_engine = create_async_engine("mariadb+asyncmy://sysb:sysb@127.0.0.1:3317/test", pool_size=300, pool_recycle=-1)
-"""
 
 
 class MyClient(object):
@@ -84,18 +63,6 @@ class PrepareStmtClient(MyClient):
         self.cnx = mysql.connector.Connect(user=config.USER, password=config.PASSWORD, database=config.TS_DB_NAME, host=config.IP_ADDR, port=config.PORT)
         self.curprep = self.cnx.cursor(prepared=config.USE_PREPARE_STMT)
 
-        # Prepare Stmt
-        # stmt = "SELECT * FROM test.t1 WHERE i=%s;"
-        # self.curprep.execute(stmt)
-
-        # self.cur = self.cnx.cursor(buffered=True)
-        
-        ### Prepare
-        # cursor.execute("prepare test from 'select * from test.t1 where i=?;'")
-        
-        # self.conn = pool.connect()
-        # self.engine = create_engine("mariadb+pymysql://mono:mono@127.0.0.1:3317/test", poolclass=sqlalchemy.pool.SingletonThreadPool)
-        # self.engine = create_engine("mariadb+pymysql://mono:mono@127.0.0.1:3317/test", poolclass=NullPool)
 
     def __del__(self):
         self.curprep.close()
@@ -118,8 +85,7 @@ class PrepareStmtClient(MyClient):
                 "exception": None,
                 "response_time": 0
             }
-
-            ### Execute stmt           
+        
             self.curprep.execute(operation, params, multi)
             rowset = self.curprep.fetchall()
             self.cnx.commit()
@@ -160,16 +126,10 @@ class PoolClient(MyClient):
 
             # Return connection from pool
             conn = ConnectionPool().pool().connect()
-            # conn = pool.connect()
             cursor = conn.cursor()
             cursor.execute(operation)
             rowset = cursor.fetchall()
             conn.commit()
-
-
-
-            # desc = cursor.description()
-            # row_count = cursor.rowcount()
         
             request_meta["response"] = "Ok!"
             request_meta["response_length"] = len(rowset)

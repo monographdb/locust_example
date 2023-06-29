@@ -20,14 +20,11 @@ class MyLocust(User):
 
 
 class QueryUser(MyLocust):
-    # host = '127.0.0.1'
     # wait_time = between(0.1, 1)
 
     @task
-    def execute_pk_read(self):
+    def test_my_query(self):
         pass
-        # self.client.execute("SELECT * FROM test.sbtest1 where id=?;", (1, ))
-        # self.client.execute("SELECT * FROM test.sbtest1 where id=1;")
 
 
     def on_start(self):

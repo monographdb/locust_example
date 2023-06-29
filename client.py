@@ -61,6 +61,7 @@ class PrepareStmtClient(MyClient):
         assert(config.USE_PREPARE_STMT == True)
         super().__init__()
         self.cnx = mysql.connector.Connect(user=config.USER, password=config.PASSWORD, database=config.TS_DB_NAME, host=config.IP_ADDR, port=config.PORT)
+        self.cnx.autocommit = True
         self.curprep = self.cnx.cursor(prepared=config.USE_PREPARE_STMT)
 
 
@@ -88,7 +89,6 @@ class PrepareStmtClient(MyClient):
         
             self.curprep.execute(operation, params, multi)
             rowset = self.curprep.fetchall()
-            self.cnx.commit()
             
             
             request_meta["response"] = "Ok"

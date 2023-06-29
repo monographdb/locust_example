@@ -25,6 +25,7 @@ class QueryUser(MyLocust):
 
     @task
     def execute_pk_read(self):
+        pass
         # self.client.execute("SELECT * FROM test.sbtest1 where id=?;", (1, ))
         # self.client.execute("SELECT * FROM test.sbtest1 where id=1;")
 

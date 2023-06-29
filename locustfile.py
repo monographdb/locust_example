@@ -25,23 +25,11 @@ class QueryUser(MyLocust):
 
     @task
     def execute_pk_read(self):
-        #query = "SELECT * FROM test.sbtest1 where id>1 and id<100;"
-        ### monographdb
-
-
-        # Prepare Stmt
-        # query = "SELECT * FROM test.sbtest1 where id=?;"
-        # self.client.execute_from_pool(query)
-        # self.client.execute(query, (1, ))
-
-
-
+        # self.client.execute("SELECT * FROM test.sbtest1 where id=?;", (1, ))
         # self.client.execute("SELECT * FROM test.sbtest1 where id=1;")
-        self.client.execute("SELECT * FROM test.sbtest1 where id=?;", (1, ))
 
 
-
-    def on_start(self):#
+    def on_start(self):
         pass
         
 

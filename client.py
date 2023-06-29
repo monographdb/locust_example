@@ -122,6 +122,7 @@ class PrepareStmtClient(MyClient):
             ### Execute stmt           
             self.curprep.execute(operation, params, multi)
             rowset = self.curprep.fetchall()
+            self.cnx.commit()
             
             
             request_meta["response"] = "Ok"
@@ -163,6 +164,7 @@ class PoolClient(MyClient):
             cursor = conn.cursor()
             cursor.execute(operation)
             rowset = cursor.fetchall()
+            conn.commit()
 
 
 
